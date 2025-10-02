@@ -56,6 +56,10 @@
             --fs-text: 12px;
             --vh: 1vh;
             --vw: 1vw;
+            --line-height-base: 1.6; /* Added for better readability */
+            --project-title-max-fs: 60px; /* Max font size for project titles */
+            --project-title-min-fs: 30px; /* Min font size for project titles */
+            --c-text-rgb: 0, 0, 0; /* For scroll indicator shadow */
         }
 
         @media(prefers-color-scheme: dark) {
@@ -63,6 +67,7 @@
                 --c-bg: hsl(0, 0%, 5%);
                 --c-text: hsl(0, 0%, 95%);
                 --c-particle: rgba(255, 255, 255, 0.5);
+                --c-text-rgb: 255, 255, 255;
             }
         }
         html,body {
@@ -80,11 +85,16 @@
             -webkit-text-size-adjust: none;
             text-size-adjust: none;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale
+            -moz-osx-font-smoothing: grayscale;
+            line-height: var(--line-height-base); /* Apply base line-height */
         }
 
         body.is-monospaced {
             font-family: 'Space Mono', "Monaco", "Menlo", "Ubuntu Mono", monospace;
+            --c-bg: hsl(220, 10%, 15%); /* Darker, slightly blue-tinted background */
+            --c-text: hsl(120, 70%, 70%); /* Softer green text */
+            --c-particle: rgba(120, 200, 120, 0.3); /* Softer, desaturated green particles */
+            --c-text-rgb: 120, 200, 120;
         }
 
         #Page {
@@ -128,11 +138,13 @@
         }
 
         #EnterView ._t1 {
-            font-weight: 400
+            font-weight: 400;
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out; /* Added transition */
         }
 
         #EnterView ._t2 {
-            font-weight: 200
+            font-weight: 200;
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out; /* Added transition */
         }
 
         #Background {
@@ -292,6 +304,11 @@
             content: "■"
         }
 
+        /* Mono theme box color */
+        .theme_btn[data-theme="mono"].is-selected ._box::before {
+            color: hsl(120, 70%, 70%);
+        }
+
         #Copyright {
             position: fixed;
             z-index: 10;
@@ -316,7 +333,6 @@
             width: 100%;
             height: 100%;
             overflow: hidden;
-            /* Removed mix-blend-mode to fix visibility issues */
         }
 
         .content_inner {
@@ -347,8 +363,9 @@
 
         .siteHeader_title {
             margin: -0.1em 0 0 -0.04em;
-            font-weight: 200;
-            font-size: 30px
+            font-weight: 300; /* Slightly bolder */
+            font-size: clamp(30px, 5vw, 60px); /* Fluid font size with min/max */
+            letter-spacing: -0.02em; /* Slightly tighter for better look */
         }
 
         @media(min-width: 1280px) {
@@ -452,7 +469,7 @@
         }
 
         .home_aboutme {
-            line-height: 1.5
+            line-height: 1.7; /* Increased line height */
         }
 
         .home_aboutme span {
@@ -499,14 +516,20 @@
         .project-item {
             text-align: right;
             width: 100%;
+            transition: transform 0.3s ease, opacity 0.3s ease; /* Added hover transition */
+        }
+
+        .project-item:hover {
+            transform: translateX(-5px); /* Subtle slide left on hover */
+            opacity: 0.9;
         }
 
         .project-title {
-            font-weight: 200;
-            font-size: 6.5vw;
+            font-weight: 300; /* Slightly bolder for emphasis */
+            font-size: clamp(var(--project-title-min-fs), 6.5vw, var(--project-title-max-fs)); /* Fluid font size */
             cursor: pointer;
             transition: opacity 0.3s ease;
-            margin-bottom: 10px;
+            margin-bottom: 15px; /* More spacing */
         }
 
         .project-title:hover {
@@ -547,7 +570,7 @@
         /* Scroll Indicator */
         .scroll-indicator {
             position: fixed;
-            right: calc(var(--pad) + 5px);
+            right: var(--pad); /* Align to main padding */
             top: 50%;
             transform: translateY(-50%);
             z-index: 10;
@@ -559,17 +582,18 @@
         }
 
         .scroll-dot {
-            width: 6px;
-            height: 6px;
+            width: 8px; /* Slightly larger dots */
+            height: 8px; /* Slightly larger dots */
             background-color: var(--c-text);
             border-radius: 50%;
-            margin: 4px 0;
-            transition: transform 0.3s ease, opacity 0.3s ease;
+            margin: 5px 0; /* More space between dots */
+            transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease;
         }
 
         .scroll-dot.active {
-            transform: scale(1.5);
+            transform: scale(1.8); /* More pronounced active dot */
             opacity: 1;
+            box-shadow: 0 0 5px rgba(var(--c-text-rgb), 0.5); /* Subtle glow */
         }
 
         .info {
@@ -626,7 +650,7 @@
         }
 
         .info_content {
-            line-height: 1.5
+            line-height: 1.7; /* Increased line height */
         }
 
         .info_content .is-light {
@@ -678,11 +702,12 @@
         }
 
         .social_title {
-            font-weight: 200;
-            font-size: 6.5vw;
+            font-weight: 300; /* Consistent with project titles */
+            font-size: clamp(var(--project-title-min-fs), 6.5vw, var(--project-title-max-fs)); /* Fluid font size */
             cursor: pointer;
             transition: opacity 0.3s ease;
             color: var(--c-text); /* Ensure text color is set */
+            margin-bottom: 15px; /* More spacing */
         }
 
         .social_title:hover {
@@ -795,116 +820,115 @@
                 </div>
 
                 <!-- Projects Page -->
-                <!-- Projects Page -->
-<div class="page" id="page-project">
-    <div class="project-container">
-        <div class="project-scroll" id="projectScroll">
-            <div class="project-list">
-                <div class="project-item">
-                    <h4 class="project-title text-btn">Artificial Neural Networks from Scratch</h4>
-                    <a href="https://github.com/Devrcb18/workspace/blob/main/neural-network-from-scratch.ipynb" target="_blank" class="project-link">
-                        🔗 ANN from Scratch for Classification (GitHub)
-                    </a>
-                    <div class="project-info">July 2025</div>
+                <div class="page" id="page-project">
+                    <div class="project-container">
+                        <div class="project-scroll" id="projectScroll">
+                            <div class="project-list">
+                                <div class="project-item">
+                                    <h4 class="project-title text-btn">Artificial Neural Networks from Scratch</h4>
+                                    <a href="https://github.com/Devrcb18/workspace/blob/main/neural-network-from-scratch.ipynb" target="_blank" class="project-link">
+                                        🔗 ANN from Scratch for Classification (GitHub)
+                                    </a>
+                                    <div class="project-info">July 2025</div>
+                                </div>
+                                <div class="project-item">
+                                    <h4 class="project-title text-btn">Convolutional Neural Networks from Scratch</h4>
+                                    <a href="https://github.com/Devrcb18/Machine-Learning-Deep-Learning/blob/main/cnn-from-scratch-on-mnist-dataset.ipynb" target="_blank" class="project-link">
+                                        🔗 CNN from Scratch on MNIST (GitHub)
+                                    </a>
+                                    <div class="project-info">August 2025</div>
+                                </div>
+                                <div class="project-item">
+                                    <h4 class="project-title text-btn">Resistor Color Code Detector</h4>
+                                    <a href="https://github.com/Devrcb18/resistor.project" target="_blank" class="project-link">
+                                        🔗 Detecting Resistance Values with OpenCV (GitHub)
+                                    </a>
+                                    <div class="project-info">May 2025</div>
+                                </div>
+                                <div class="project-item">
+                                    <h4 class="project-title text-btn">ClickSense</h4>
+                                    <a href="https://github.com/Devrcb18/python_project/blob/main/clickbait-classification.ipynb" target="_blank" class="project-link">
+                                        🔗 ClickSense: ML Model for Clickbait Detection
+                                    </a>
+                                    <div class="project-info">April 2025</div>
+                                </div>
+                                <div class="project-item">
+                                    <h4 class="project-title text-btn">Semantor: Punctuation-Aware NMT</h4>
+                                    <a href="https://github.com/Devrcb18/Semantor" target="_blank" class="project-link">
+                                        🔗 GitHub Repository
+                                    </a>
+                                    <a href="https://medium.com/@devrcb18/semantor-punctuation-aware-neural-machine-translation-7d6d747cf26b" target="_blank" class="project-link">
+                                        🔗 Medium Article
+                                    </a>
+                                    <div class="project-info">September 2025</div>
+                                </div>
+                                <div class="project-item">
+                                    <h4 class="project-title text-btn">Legal.AI</h4>
+                                    <a href="https://github.com/Devrcb18/legal.ai" target="_blank" class="project-link">
+                                        🔗 AI for Legal Text Analysis (GitHub)
+                                    </a>
+                                    <div class="project-info">September 2025</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="scroll-indicator" id="scrollIndicator">
+                            <div class="scroll-dot" data-index="0"></div>
+                            <div class="scroll-dot" data-index="1"></div>
+                            <div class="scroll-dot" data-index="2"></div>
+                            <div class="scroll-dot" data-index="3"></div>
+                            <div class="scroll-dot" data-index="4"></div>
+                            <div class="scroll-dot" data-index="5"></div>
+                        </div>
+                    </div>
                 </div>
-                <div class="project-item">
-                    <h4 class="project-title text-btn">Convolutional Neural Networks from Scratch</h4>
-                    <a href="https://github.com/Devrcb18/Machine-Learning-Deep-Learning/blob/main/cnn-from-scratch-on-mnist-dataset.ipynb" target="_blank" class="project-link">
-                        🔗 CNN from Scratch on MNIST (GitHub)
-                    </a>
-                    <div class="project-info">August 2025</div>
-                </div>
-                <div class="project-item">
-                    <h4 class="project-title text-btn">Resistor Color Code Detector</h4>
-                    <a href="https://github.com/Devrcb18/resistor.project" target="_blank" class="project-link">
-                        🔗 Detecting Resistance Values with OpenCV (GitHub)
-                    </a>
-                    <div class="project-info">May 2025</div>
-                </div>
-                <div class="project-item">
-                    <h4 class="project-title text-btn">ClickSense</h4>
-                    <a href="https://github.com/Devrcb18/python_project/blob/main/clickbait-classification.ipynb" target="_blank" class="project-link">
-                        🔗 ClickSense: ML Model for Clickbait Detection
-                    </a>
-                    <div class="project-info">April 2025</div>
-                </div>
-                <div class="project-item">
-                    <h4 class="project-title text-btn">Semantor: Punctuation-Aware NMT</h4>
-                    <a href="https://github.com/Devrcb18/Semantor" target="_blank" class="project-link">
-                        🔗 GitHub Repository
-                    </a>
-                    <a href="https://medium.com/@devrcb18/semantor-punctuation-aware-neural-machine-translation-7d6d747cf26b" target="_blank" class="project-link">
-                        🔗 Medium Article
-                    </a>
-                    <div class="project-info">September 2025</div>
-                </div>
-                <div class="project-item">
-                    <h4 class="project-title text-btn">Legal.AI</h4>
-                    <a href="https://github.com/Devrcb18/legal.ai" target="_blank" class="project-link">
-                        🔗 AI for Legal Text Analysis (GitHub)
-                    </a>
-                    <div class="project-info">September 2025</div>
-                </div>
-            </div>
-        </div>
-        <div class="scroll-indicator" id="scrollIndicator">
-            <div class="scroll-dot" data-index="0"></div>
-            <div class="scroll-dot" data-index="1"></div>
-            <div class="scroll-dot" data-index="2"></div>
-            <div class="scroll-dot" data-index="3"></div>
-            <div class="scroll-dot" data-index="4"></div>
-            <div class="scroll-dot" data-index="5"></div>
-        </div>
-    </div>
-</div>
 
-<!-- Info Page -->
-<div class="page" id="page-info">
-    <div class="info">
-        <div class="info_item info_item-1">
-            <div class="info_content">
-                <span class="is-light">Experience </span><br>
-                .Frequent contributor on GitHub and Kaggle<br>
-                .Core member of FreeScape (Open Source Community)<br>
-                .Gained experience in teamwork and collaboration during technical events<br>
-                .Participant in hackathons (hardware & software tracks)<br>
-            </div>
-        </div>
-        <div class="info_item info_item-2">
-            <div class="info_content">
-                <span class="is-light">Skills</span><br>
-                .Machine Learning & Deep Learning<br>
-                .Python, C, C++<br>
-                .scikit-learn, pandas, NumPy, matplotlib<br>
-                .OpenCV, Plotly, Tableau<br>
-                .Data Analysis & Visualization<br>
-                .Electronics & Arduino<br>
-                .Git, Jupyter Notebook<br>
-            </div>
-        </div>
-        <div class="info_item info_item-3">
-            <div class="info_content">
-                <span class="is-light">Recognition & Certifications</span><br>
-                .80% progress toward Kaggle Code Expert<br>
-                .IBM Data Fundamentals Certificate<br>
-                .freeCodeCamp: Data Analysis with Python, Scientific Computing with Python<br>
-                .Kaggle: Intro to ML, Intermediate ML, Feature Engineering<br>
-                .Unstop: Certificate of Excellence – Advanced Maze Solving<br>
-            </div>
-        </div>
-    </div>
-</div>
+                <!-- Info Page -->
+                <div class="page" id="page-info">
+                    <div class="info">
+                        <div class="info_item info_item-1">
+                            <div class="info_content">
+                                <span class="is-light">Experience </span><br>
+                                .Frequent contributor on GitHub and Kaggle<br>
+                                .Core member of FreeScape (Open Source Community)<br>
+                                .Gained experience in teamwork and collaboration during technical events<br>
+                                .Participant in hackathons (hardware & software tracks)<br>
+                            </div>
+                        </div>
+                        <div class="info_item info_item-2">
+                            <div class="info_content">
+                                <span class="is-light">Skills</span><br>
+                                .Machine Learning & Deep Learning<br>
+                                .Python, C, C++<br>
+                                .scikit-learn, pandas, NumPy, matplotlib<br>
+                                .OpenCV, Plotly, Tableau<br>
+                                .Data Analysis & Visualization<br>
+                                .Electronics & Arduino<br>
+                                .Git, Jupyter Notebook<br>
+                            </div>
+                        </div>
+                        <div class="info_item info_item-3">
+                            <div class="info_content">
+                                <span class="is-light">Recognition & Certifications</span><br>
+                                .80% progress toward Kaggle Code Expert<br>
+                                .IBM Data Fundamentals Certificate<br>
+                                .freeCodeCamp: Data Analysis with Python, Scientific Computing with Python<br>
+                                .Kaggle: Intro to ML, Intermediate ML, Feature Engineering<br>
+                                .Unstop: Certificate of Excellence – Advanced Maze Solving<br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
-<!-- Contact Page -->
-<div class="page" id="page-contact">
-    <div class="contact">
-        <a href="mailto:devanshc.shukla@gmail.com" class="contact_text text-btn">devanshc.shukla@gmail.com</a>
-        <a href="tel:9450508006" class="contact_text text-btn">+91 94505 08006</a>
-        <span class="contact_text">
-            <span class="jp">Available for new projects</span>
-        </span>
-    </div>
-</div>
+                <!-- Contact Page -->
+                <div class="page" id="page-contact">
+                    <div class="contact">
+                        <a href="mailto:devanshc.shukla@gmail.com" class="contact_text text-btn">devanshc.shukla@gmail.com</a>
+                        <a href="tel:9450508006" class="contact_text text-btn">+91 94505 08006</a>
+                        <span class="contact_text">
+                            <span class="jp">Available for new projects</span>
+                        </span>
+                    </div>
+                </div>
 
 
                 <!-- Social Links Page -->
@@ -912,33 +936,33 @@
                     <div class="social">
                         <div class="social_list">
                             <div class="social_item">
-                                <h4 class="social_title text-btn"></h4>
+                                <h4 class="social_title text-btn">GitHub</h4>
                                 <a href="https://github.com/Devrcb18" target="_blank" class="social_link">
-                                   -> GitHub
+                                   -> My GitHub Profile
                                 </a>
                             </div>
                             <div class="social_item">
-                                <h4 class="social_title text-btn"></h4>
+                                <h4 class="social_title text-btn">Kaggle</h4>
                                 <a href="https://www.kaggle.com/devanshshukla123" target="_blank" class="social_link">
-                                   -> Kaggle
+                                   -> My Kaggle Profile
                                 </a>
                             </div>
                             <div class="social_item">
-                                <h4 class="social_title text-btn"></h4>
+                                <h4 class="social_title text-btn">Codeforces</h4>
                                 <a href="https://codeforces.com/profile/devanshc.shukla" target="_blank" class="social_link">
-                                    -> Codeforces
+                                    -> My Codeforces Profile
                                 </a>
                             </div>
                             <div class="social_item">
-                                <h4 class="social_title text-btn"></h4>
+                                <h4 class="social_title text-btn">Instagram</h4>
                                 <a href="https://www.instagram.com/devrcb18/" target="_blank" class="social_link">
-                                    ->Instagram
+                                    -> My Instagram
                                 </a>
                             </div>
                             <div class="social_item">
-                                <h4 class="social_title text-btn"></h4>
+                                <h4 class="social_title text-btn">Resume</h4>
                                 <a href="https://drive.google.com/file/d/1FPLZP_ypSvzqgHhTURjugGtfazQRdax7/view?usp=sharing" target="_blank" class="social_link">
-                                    ->Resume
+                                    -> View My Resume
                                 </a>
                             </div>
                         </div>
@@ -986,14 +1010,28 @@
             const dots = document.querySelectorAll('.scroll-dot');
             const projectItems = document.querySelectorAll('.project-item');
             
-            if (projectItems.length === 0) return;
+            if (projectItems.length === 0 || !scrollContainer) return; // Added check for scrollContainer
+
+            // Calculate item height dynamically, including margin
+            const calculateItemHeight = () => {
+                if (projectItems.length === 0) return 0;
+                const firstItem = projectItems[0];
+                const itemStyle = window.getComputedStyle(firstItem);
+                return firstItem.offsetHeight + parseFloat(itemStyle.marginBottom);
+            };
+            let itemHeight = calculateItemHeight();
+
+            // Recalculate on resize
+            window.addEventListener('resize', () => {
+                itemHeight = calculateItemHeight();
+                // Update active dot immediately after resize to prevent misalignment
+                updateScrollIndicator(); 
+            });
             
-            const itemHeight = projectItems[0].offsetHeight + 
-                              parseInt(window.getComputedStyle(projectItems[0]).marginBottom);
-            
-            scrollContainer.addEventListener('scroll', () => {
+            const updateScrollIndicator = () => {
                 const scrollPosition = scrollContainer.scrollTop;
-                const activeIndex = Math.round(scrollPosition / itemHeight);
+                // Ensure itemHeight is not zero to prevent division by zero
+                const activeIndex = itemHeight > 0 ? Math.round(scrollPosition / itemHeight) : 0;
                 
                 dots.forEach((dot, index) => {
                     if (index === activeIndex) {
@@ -1002,7 +1040,9 @@
                         dot.classList.remove('active');
                     }
                 });
-            });
+            };
+
+            scrollContainer.addEventListener('scroll', updateScrollIndicator);
             
             // Click on dots to scroll to projects
             dots.forEach(dot => {
@@ -1014,6 +1054,9 @@
                     });
                 });
             });
+
+            // Initial update
+            updateScrollIndicator();
         }
 
         // Page navigation
@@ -1031,13 +1074,50 @@
                 // Update pages
                 pages.forEach(page => page.classList.remove('is-active'));
                 document.getElementById(`page-${targetPage}`).classList.add('is-active');
+
+                // If navigating to projects page, ensure scroll indicator is updated
+                if (targetPage === 'project') {
+                    setupScrollIndicator(); // Re-initialize to ensure it's active
+                }
             });
         });
 
         // Theme switcher
         const themeButtons = document.querySelectorAll('.theme_btn');
         const body = document.body;
-        const page = document.getElementById('Page');
+        const root = document.documentElement; // Get the root element for CSS variables
+
+        // Define theme configurations
+        const themes = {
+            light: {
+                '--c-bg': 'hsl(0, 0%, 90%)',
+                '--c-text': 'hsl(0, 0%, 10%)',
+                '--c-particle': 'rgba(0, 0, 0, 0.5)',
+                '--c-text-rgb': '0, 0, 0' // For box-shadow
+            },
+            dark: {
+                '--c-bg': 'hsl(0, 0%, 5%)',
+                '--c-text': 'hsl(0, 0%, 95%)',
+                '--c-particle': 'rgba(255, 255, 255, 0.5)',
+                '--c-text-rgb': '255, 255, 255'
+            },
+            mono: {
+                '--c-bg': 'hsl(220, 10%, 15%)', // Softened mono background
+                '--c-text': 'hsl(120, 70%, 70%)', // Softer mono text green
+                '--c-particle': 'rgba(120, 200, 120, 0.3)', // Softer mono particle green
+                '--c-text-rgb': '120, 200, 120'
+            }
+        };
+
+        function applyTheme(themeName) {
+            // Remove monospaced class if not mono theme
+            body.classList.toggle('is-monospaced', themeName === 'mono');
+
+            // Apply CSS variables from the theme object
+            for (const [prop, value] of Object.entries(themes[themeName])) {
+                root.style.setProperty(prop, value);
+            }
+        }
 
         themeButtons.forEach(btn => {
             btn.addEventListener('click', () => {
@@ -1047,32 +1127,26 @@
                 themeButtons.forEach(b => b.classList.remove('is-selected'));
                 btn.classList.add('is-selected');
                 
-                // Apply theme
-                body.classList.remove('is-monospaced');
-                
-                if (theme === 'dark') {
-                    document.documentElement.style.setProperty('--c-bg', 'hsl(0, 0%, 5%)');
-                    document.documentElement.style.setProperty('--c-text', 'hsl(0, 0%, 95%)');
-                    document.documentElement.style.setProperty('--c-particle', 'rgba(255, 255, 255, 0.5)');
-                } else if (theme === 'light') {
-                    document.documentElement.style.setProperty('--c-bg', 'hsl(0, 0%, 90%)');
-                    document.documentElement.style.setProperty('--c-text', 'hsl(0, 0%, 10%)');
-                    document.documentElement.style.setProperty('--c-particle', 'rgba(0, 0, 0, 0.5)');
-                } else if (theme === 'mono') {
-                    body.classList.add('is-monospaced');
-                    document.documentElement.style.setProperty('--c-bg', 'hsl(0, 0%, 15%)');
-                    document.documentElement.style.setProperty('--c-text', 'hsl(120, 100%, 80%)');
-                    document.documentElement.style.setProperty('--c-particle', 'rgba(120, 255, 120, 0.5)');
-                }
+                applyTheme(theme);
             });
         });
 
         // Enter view animation
         const enterView = document.getElementById('EnterView');
-        
+        const enterViewT1 = enterView.querySelector('._t1');
+        const enterViewT2 = enterView.querySelector('._t2');
+
+        // Enhanced EnterView animation
+        setTimeout(() => {
+            enterViewT1.style.transform = 'translateY(-20px)';
+            enterViewT1.style.opacity = '0';
+            enterViewT2.style.transform = 'translateY(20px)';
+            enterViewT2.style.opacity = '0';
+        }, 1500); // Start fading/moving after 1.5s
+
         setTimeout(() => {
             enterView.classList.add('hidden');
-        }, 2000);
+        }, 2500); // Fully hide after 2.5s
 
         // Responsive viewport height
         function setVH() {
