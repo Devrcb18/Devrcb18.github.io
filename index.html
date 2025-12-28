@@ -94,26 +94,56 @@
             margin-bottom: 40px;
             letter-spacing: -1px;
         }
+/* Update the Home Section to a Grid/Flex layout */
+#home {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+}
 
-        /* --- Hero Section --- */
-        #home {
-            justify-content: center;
-            align-items: flex-start;
-        }
+.hero-content {
+    flex: 1;
+}
 
-        .hero-title {
-            font-size: clamp(3rem, 8vw, 6rem);
-            line-height: 0.95;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-        }
+/* The Image Container with the modern cut-edge */
+.hero-image-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
 
-        .hero-subtitle {
-            color: var(--text-secondary);
-            font-size: 1.25rem;
-            max-width: 600px;
-            margin-bottom: 40px;
-        }
+.modern-cut-img {
+    width: 100%;
+    max-width: 450px;
+    height: auto;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    /* This creates the sharp, modern angular cut */
+    clip-path: polygon(25% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 25%);
+    border: 2px solid var(--accent);
+    background: var(--surface);
+    transition: transform 0.5s ease;
+}
+
+.modern-cut-img:hover {
+    transform: scale(1.02);
+}
+
+/* Responsive fix for mobile */
+@media (max-width: 768px) {
+    #home {
+        flex-direction: column-reverse;
+        text-align: center;
+        padding-top: 150px;
+    }
+    .hero-image-container {
+        width: 80%;
+        margin-bottom: 30px;
+    }
+}
 
         /* --- About Section --- */
         .about-grid {
@@ -232,6 +262,7 @@
             color: #000;
             border-color: var(--accent);
         }
+        
 
         /* --- Intersection Observer Animation --- */
         .reveal {
@@ -264,16 +295,22 @@
             <a href="#profiles">Profiles</a>
         </div>
     </nav>
-
-    <section id="home">
+<section id="home">
+    <div class="hero-content">
         <div class="section-tag">// introduction</div>
         <h1 class="hero-title">Engineering<br>Intelligent<br>Systems.</h1>
         <p class="hero-subtitle">B.Tech student at IIIT Kalyani focused on Machine Learning, Deep Learning, and building scalable backend architectures.</p>
         <div class="profile-links">
             <a href="mailto:devanshc.shukla@gmail.com" class="profile-btn">Contact Me</a>
         </div>
-    </section>
-
+    </div>
+    
+    <div class="hero-image-container">
+        <img src="https://drive.google.com/thumbnail?id=1YaXr1gYSOHXud29U2jcTAlBd1t1b2W3h&sz=w1000" 
+             alt="Devansh Shukla" 
+             class="modern-cut-img">
+    </div>
+</section>
     <section id="about" class="reveal">
         <div class="section-tag">// background</div>
         <h2>About Me</h2>
@@ -383,3 +420,4 @@
 
 </body>
 </html>
+
